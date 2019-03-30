@@ -70,6 +70,7 @@ public:
     void Clear();
     bool isEmpty() {return root == nullptr;}
     void IncreamentValueByKey(TKey tkey);
+    void IncreamentValueByKey(TKey tKey, bool cond);
     ~MyMap();
     MyMap();
 private:
@@ -147,12 +148,10 @@ void MyMap<TKeys, TValue>::Insert(TKeys key, TValue value) {
         cursor = root;
         while(cursor != nullptr){
             helpToFindFather = cursor;
-            if(cursor->key < newNode->key){
+            if(cursor->key <= newNode->key){
                 cursor = cursor->rightSon;
             }else if(cursor->key > newNode->key){
                 cursor = cursor->leftSon;
-            }else{
-                throw invalid_argument("There this key in the tree");
             }
         }
         newNode->father = helpToFindFather;
@@ -488,5 +487,16 @@ void MyMap<TKey, TValue>::ShowAsListHelper(Node<TKey, TValue> *node) {
         ShowAsListHelper(node->rightSon);
     }
 }
+
+template<class TKey, class TValue>
+void MyMap<TKey, TValue>::IncreamentValueByKey(TKey tKey, bool cond) {
+    if(typeid(TValue) != typeid(MyList<bool>)){
+        throw logic_error("You can't call this function if value's type not a number.");
+    }
+
+    Node<TKey,TValue> *findedNode = Find(tKey);
+    findedNode->data.PushBack(cond);
+}
+
 
 #endif //UNTITLED2_MYMAP_H
