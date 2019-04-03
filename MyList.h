@@ -32,7 +32,7 @@ public:
     ~MyList();
     T* ToArr();
     void PushFront(T elem);
-    void PushBack(T elem);
+    void PushBack(T &elem);
     void Show();
     void PopBack();
     void PopFront();
@@ -43,15 +43,14 @@ public:
     void Clear();
     void Set(T newValue, int position);
     bool isEmpty(){ return (size == 0); }
+    string toString();
     template <typename T1> friend ostream& operator<< (ostream &out, MyList<T1> list);
 private:
-    ComplexElement<T>* cursor;
     int size;
     ComplexElement<T>* head = nullptr;
 };
 
 template<class T> MyList<T>::MyList() {
-    cursor = new ComplexElement<T>();
     size = 0;
     head = nullptr;
 }
@@ -73,7 +72,8 @@ template<class T> void MyList<T>::PushFront(T elem) {
     size++;///Increment size value
 }
 
-template<class T> void MyList<T>::PushBack(T elem) {
+template<class T> void MyList<T>::PushBack(T &elem) {
+    ComplexElement<T>* cursor;
     auto * newElem = new ComplexElement<T>();
     newElem->value = elem;
     newElem->next = nullptr;
@@ -91,6 +91,7 @@ template<class T> void MyList<T>::PushBack(T elem) {
 }
 
 template<class T> void MyList<T>::Show() {
+    ComplexElement<T>* cursor;
     cursor = head;
 
     if (cursor != nullptr){
@@ -99,14 +100,14 @@ template<class T> void MyList<T>::Show() {
             cout << " " << cursor->value << (cursor->next == nullptr ? " ":",");
             cursor = cursor->next;
         }
-        cout << "}" << endl;
+        cout << "}";
     }else{
         cout << "Empty list" << endl;
     }
 }
 
 template<class T> void MyList<T>::PopBack() {
-    cursor = head;
+    ComplexElement<T>* cursor = head;
 
     if(cursor != nullptr){
         if(cursor->next != nullptr){
@@ -128,7 +129,7 @@ template<class T> void MyList<T>::PopBack() {
 }
 
 template<class T> void MyList<T>::PopFront() {
-    cursor = head;
+    ComplexElement<T>* cursor = head;
 
     if(cursor != nullptr){
         if(cursor->next != nullptr){
@@ -149,7 +150,7 @@ template<class T> void MyList<T>::PopFront() {
 template<class T> void MyList<T>::Insert(T elem, int position) {
     if(position < 0 || position > size) throw invalid_argument("position must be >= 0");
 
-    cursor = head;
+    ComplexElement<T>* cursor = head;
     auto * newElem = new ComplexElement<T>();
     newElem->value = elem;
     newElem->next = nullptr;
@@ -172,6 +173,7 @@ template<class T> void MyList<T>::Insert(T elem, int position) {
 }
 
 template<class T> T MyList<T>::At(int position) {
+    ComplexElement<T>* cursor;
     if(position < 0 || position >= size) throw invalid_argument("position must be >= 0 and < size");
 
     if(head != nullptr){
@@ -189,6 +191,7 @@ template<class T> T MyList<T>::At(int position) {
 }
 
 template<class T> void MyList<T>::Remove(int position) {
+    ComplexElement<T>* cursor;
     if(position < 0 || position >= size){
         throw invalid_argument("position must be >= 0 and < size");
     }else if(position == 0){
@@ -218,6 +221,7 @@ template<class T> int MyList<T>::GetSize() {
 }
 
 template<class T> void MyList<T>::Clear() {
+    ComplexElement<T>* cursor;
     while (head != nullptr){
         cursor = head->next;
         delete head;
@@ -229,7 +233,7 @@ template<class T> void MyList<T>::Clear() {
 template<class T> void MyList<T>::Set(T newValue, int position) {
     if(position < 0 || position >= size) throw invalid_argument("position must be >= 0 and < size");
     if(head == nullptr) throw length_error("List is empty");
-    cursor = head;
+    ComplexElement<T>* cursor = head;
     int cursorPosition = -1;
 
     do{
@@ -248,7 +252,7 @@ template<class T> T *MyList<T>::ToArr() {
     if(size == 0) return nullptr;
     T *output = new T[size];
     int i = 0;
-    cursor = head;
+    ComplexElement<T>* cursor = head;
 
     while (cursor != nullptr){
         output[i] = cursor->value;
@@ -257,6 +261,20 @@ template<class T> T *MyList<T>::ToArr() {
     }
 
     return output;
+}
+
+template<class T>
+string MyList<T>::toString() {
+    string out;
+
+    ComplexElement<T>* cursor = head;
+
+    while(cursor!= nullptr){
+        out += cursor->value;
+        cursor = cursor->next;
+    }
+
+    return out;
 }
 
 #endif //LAB1_MYLIST_H

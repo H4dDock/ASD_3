@@ -70,7 +70,7 @@ public:
     void Clear();
     bool isEmpty() {return root == nullptr;}
     void IncreamentValueByKey(TKey tkey);
-    void IncreamentValueByKey(TKey tKey, bool cond);
+    void IncreamentValueByKey(TKey tKey, string cond);
     ~MyMap();
     MyMap();
 private:
@@ -155,7 +155,7 @@ void MyMap<TKeys, TValue>::Insert(TKeys key, TValue value) {
             }
         }
         newNode->father = helpToFindFather;
-        if(helpToFindFather->key < newNode->key){
+        if(helpToFindFather->key <= newNode->key){
             helpToFindFather->rightSon = newNode;
         }else{
             helpToFindFather->leftSon = newNode;
@@ -489,13 +489,13 @@ void MyMap<TKey, TValue>::ShowAsListHelper(Node<TKey, TValue> *node) {
 }
 
 template<class TKey, class TValue>
-void MyMap<TKey, TValue>::IncreamentValueByKey(TKey tKey, bool cond) {
-    if(typeid(TValue) != typeid(MyList<bool>)){
+void MyMap<TKey, TValue>::IncreamentValueByKey(TKey tKey, string cond) {
+    if(typeid(TValue) != typeid(string)){
         throw logic_error("You can't call this function if value's type not a number.");
     }
 
     Node<TKey,TValue> *findedNode = Find(tKey);
-    findedNode->data.PushBack(cond);
+    findedNode->data = findedNode->data + cond;
 }
 
 
