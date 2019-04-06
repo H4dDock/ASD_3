@@ -2,31 +2,23 @@
 #include "MyList.h"
 #include "MyMap.h"
 #include "EncodeStuff.h"
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
-int main() {
+int main(int argc, char* argv[]) {
     string inputString, encryptedString, decodedString;
-    cin >> inputString;
-    cout << inputString.size()*8 << "\n";
+    getline(cin, inputString);
 
-    MyMap<char, int> frequencyChar = CompleteFrequency(inputString);
-    MyMap<char, string> encryptSymbols = GetEncryptSymbols(frequencyChar);
-
-    frequencyChar.ShowAsList();
-    encryptSymbols.ShowAsList();
-
-    MyList<char> keysEncrypt = encryptSymbols.GetKeys();
-    MyList<string> valuesEncrypt = encryptSymbols.GetValue();
-    MyList<int> values = frequencyChar.GetValue();
-    MyList<char> keys = frequencyChar.GetKeys();
-
-    int sum = GetSumOfBite(valuesEncrypt,values);
-    cout << "\n" << sum << "\n";
-
-    encryptedString = GetEncodeString(inputString,keys,valuesEncrypt);
+    encryptedString = EncodeThis(inputString);
     cout << "encrypted: "<< encryptedString << endl;
 
+    MyMap<char, string> encryptSymbols = GetEncryptSymbols(inputString);
 
-    decodedString = GetDecodedString(encryptedString,valuesEncrypt,keysEncrypt);
-    cout << "decoded: " << decodedString;
+    decodedString = DecodeThis(encryptedString, encryptSymbols);
+    cout << "decoded: " << decodedString << endl;
+
+    testing::InitGoogleTest(&argc, argv);
+    RUN_ALL_TESTS();
+    return 0;
 }
 

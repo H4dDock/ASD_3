@@ -85,7 +85,6 @@ private:
     void AddKey(Node<TKey, TValue> *node, MyList<TKey> &list);
     void AddValue(Node<TKey, TValue> *node, MyList<TValue> &list);
     void AddColor(Node<TKey, TValue> *node, MyList<bool> &list);
-    Node<TKey,TValue> *cursor;
     Node<TKey,TValue> *root;
 };
 
@@ -140,6 +139,7 @@ void MyMap<TKey, TValue>::RightRotate(Node<TKey,TValue> *node) {
 template<class TKeys, class TValue>
 void MyMap<TKeys, TValue>::Insert(TKeys key, TValue value) {
     Node<TKeys,TValue> * newNode = new Node<TKeys,TValue>(key, value, true, nullptr, nullptr);
+    Node<TKeys,TValue> *cursor;
     if(root == nullptr){
         root = newNode;
         newNode->father = nullptr;
@@ -460,7 +460,6 @@ void MyMap<TKey, TValue>::Show() {
 
 template<class TKey, class TValue>
 MyMap<TKey, TValue>::MyMap() {
-    cursor = new Node<TKey, TValue>();
     root = nullptr;
 }
 
